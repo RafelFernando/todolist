@@ -2,9 +2,10 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@/app/generated/prisma/client";
 import { PrismaPg } from '@prisma/adapter-pg';
 import type { todo } from "@/app/generated/prisma/client";
+import { revalidatePath } from "next/cache";
 
-const adapter = new PrismaPg({ 
-  connectionString: process.env.DATABASE_URL 
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL
 });
 const prisma = new PrismaClient({ adapter });
 
@@ -13,7 +14,7 @@ export async function PATCH(
   context: { params: Promise<{ id: string }> }
 ) {
   const body: todo = await request.json();
-  const { id } = await context.params; 
+  const { id } = await context.params;
 
   if (!id) {
     return NextResponse.json(
@@ -31,6 +32,7 @@ export async function PATCH(
     },
   });
 
+  revalidatePath("/");
   return NextResponse.json(todo, { status: 200 });
 }
 
@@ -53,6 +55,6 @@ export async function DELETE(
     },
   });
 
+  revalidatePath("/");
   return NextResponse.json(todo, { status: 200 });
 }
-  
