@@ -55,7 +55,7 @@ export default async function Home() {
               return (
                 <li
                   key={todo.id}
-                  className={`flex justify-between p-2 transition-all ${isCompleted
+                  className={`flex flex-col gap-2 md:flex-row md:justify-between p-2 transition-all ${isCompleted
                       ? "bg-gray-200 text-gray-500 opacity-60 pointer-events-none"
                       : "text-black"
                     }`}
@@ -64,7 +64,7 @@ export default async function Home() {
                     {todo.title}
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 ">
                     <UpdateTodo todo={todo} disabled={isCompleted} />
                     <DeleteTodos todo={todo} disabled={isCompleted} />
                     <ToggleStatus todo={todo} />
