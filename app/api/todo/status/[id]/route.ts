@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@/app/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { revalidatePath } from "next/cache";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL
@@ -26,5 +27,6 @@ export async function PATCH(
     data: { status },
   });
 
+  revalidatePath("/");
   return NextResponse.json(updatedTodo, { status: 200 });
 }
