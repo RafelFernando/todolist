@@ -43,33 +43,38 @@ export default async function Home() {
       </div>
 
       <div className="my-10">
-        <ul>
-          {todos.map((todo) => {
-            const isCompleted = todo.status === "completed";
+        {todos.length === 0 ? (
+          <div className="text-center text-2xl text-gray-500 py-10">
+            Belum ada todo. Silakan tambahkan todo baru atau refresh halaman.
+          </div>
+        ) : (
+          <ul>
+            {todos.map((todo) => {
+              const isCompleted = todo.status === "completed";
 
-            return (
-              <li
-                key={todo.id}
-                className={`flex justify-between p-2 transition-all ${isCompleted
-                    ? "bg-gray-200 text-gray-500 opacity-60 pointer-events-none"
-                    : "text-black"
-                  }`}
-              >
-                <div className={isCompleted ? "line-through" : ""}>
-                  {todo.title}
-                </div>
+              return (
+                <li
+                  key={todo.id}
+                  className={`flex justify-between p-2 transition-all ${isCompleted
+                      ? "bg-gray-200 text-gray-500 opacity-60 pointer-events-none"
+                      : "text-black"
+                    }`}
+                >
+                  <div className={isCompleted ? "line-through" : ""}>
+                    {todo.title}
+                  </div>
 
-                <div className="flex gap-2 ">
-                  <UpdateTodo todo={todo} disabled={isCompleted} />
-                  <DeleteTodos todo={todo} disabled={isCompleted} />
-                  <ToggleStatus todo={todo} />
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+                  <div className="flex gap-2">
+                    <UpdateTodo todo={todo} disabled={isCompleted} />
+                    <DeleteTodos todo={todo} disabled={isCompleted} />
+                    <ToggleStatus todo={todo} />
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
-
     </div>
   );
 }

@@ -11,6 +11,7 @@ type Todo = {
 export default function UpdateTodo({ todo, disabled }: { todo: Todo; disabled?: boolean }) {
     const [isOpen, setIsOpen] = useState(false);
     const [title, setTitle] = useState(todo.title);
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
     const handleModal = () => {
@@ -19,16 +20,18 @@ export default function UpdateTodo({ todo, disabled }: { todo: Todo; disabled?: 
 
     const handleUpdate = async (e: SyntheticEvent) => {
         e.preventDefault();
+        setIsLoading(true);
         await axios.patch(`/api/todo/${todo.id}`, {
             title: title,
         });
         router.refresh();
         setIsOpen(false);
+        setIsLoading(false);
     }
 
     return (
         <div>
-            <button className="btn btn-info btn-sm" onClick={handleModal}>Edit Todo</button>
+            <button className="btn btn-info btn-sm text-sm" onClick={handleModal}>Edit Todo</button>
             <div className={isOpen ? 'modal modal-open' : 'modal'}>
                 <div className="modal-box bg-white">
                     <h3 className="font-bold text-lg">Update {todo.title}</h3>
@@ -45,7 +48,13 @@ export default function UpdateTodo({ todo, disabled }: { todo: Todo; disabled?: 
                         </div>
                         <div className="modal-action">
                             <button type="button" className="btn" onClick={handleModal}>Close</button>
-                            <button type="submit" className="btn btn-primary">Save</button>
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-70"
+                            >
+                                {isLoading ? "Updating..." : "Update"}
+                            </button>
                         </div>
                     </form>
                 </div>
